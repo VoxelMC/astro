@@ -1,5 +1,11 @@
 # create-astro
 
+## 4.4.0
+
+### Minor Changes
+
+- [#8853](https://github.com/withastro/astro/pull/8853) [`ce807a2bf`](https://github.com/withastro/astro/commit/ce807a2bfef325683bfdb01065a73c4e2b0a5fe5) Thanks [@rayriffy](https://github.com/rayriffy)! - Automatically installs the required dependencies to run the astro check command when the user indicates they plan to write TypeScript.
+
 ## 4.3.0
 
 ### Minor Changes
