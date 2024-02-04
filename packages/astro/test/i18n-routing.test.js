@@ -1,4 +1,6 @@
-import { expect } from 'chai';
+import { use, expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+use(chaiAsPromised);
 import * as cheerio from 'cheerio';
 import testAdapter from './test-adapter.js';
 import { loadFixture } from './test-utils.js';
@@ -544,23 +546,15 @@ describe('[SSG] i18n routing', () => {
 		it("should NOT render the default locale if there isn't a fallback and the route is missing", async () => {
 			try {
 				await fixture.readFile('/it/start/index.html');
-				// failed
-				return false;
+				expect.fail();
 			} catch {
-				// success
 				return true;
 			}
 		});
 
 		it("should render a 404 because the route `fr` isn't included in the list of locales of the configuration", async () => {
-			try {
-				await fixture.readFile('/fr/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/fr/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 	});
 
@@ -606,25 +600,13 @@ describe('[SSG] i18n routing', () => {
 		});
 
 		it("should NOT render the default locale if there isn't a fallback and the route is missing", async () => {
-			try {
-				await fixture.readFile('/it/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/it/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 
 		it("should render a 404 because the route `fr` isn't included in the list of locales of the configuration", async () => {
-			try {
-				await fixture.readFile('/fr/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/fr/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 	});
 
@@ -650,14 +632,8 @@ describe('[SSG] i18n routing', () => {
 		});
 
 		it('should return 404 when route contains the default locale', async () => {
-			try {
-				await fixture.readFile('/start/en/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/start/en/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 
 		it('should render localised page correctly', async () => {
@@ -681,25 +657,13 @@ describe('[SSG] i18n routing', () => {
 		});
 
 		it("should NOT render the default locale if there isn't a fallback and the route is missing", async () => {
-			try {
-				await fixture.readFile('/it/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/it/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 
 		it("should render a 404 because the route `fr` isn't included in the list of locales of the configuration", async () => {
-			try {
-				await fixture.readFile('/fr/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/fr/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 	});
 
@@ -776,25 +740,13 @@ describe('[SSG] i18n routing', () => {
 		});
 
 		it("should NOT render the default locale if there isn't a fallback and the route is missing", async () => {
-			try {
-				await fixture.readFile('/it/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/it/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 
 		it("should render a 404 because the route `fr` isn't included in the list of locales of the configuration", async () => {
-			try {
-				await fixture.readFile('/fr/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/fr/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 
 		describe('[trailingSlash: always]', () => {
@@ -898,14 +850,8 @@ describe('[SSG] i18n routing', () => {
 		});
 
 		it("should render a 404 because the route `fr` isn't included in the list of locales of the configuration", async () => {
-			try {
-				await fixture.readFile('/fr/start/index.html');
-				// failed
-				return false;
-			} catch {
-				// success
-				return true;
-			}
+			const filePromise = fixture.readFile('/fr/start/index.html');
+			expect(filePromise).to.eventually.throw();
 		});
 
 		it('should render the page with client scripts', async () => {
