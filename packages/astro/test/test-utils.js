@@ -339,3 +339,12 @@ export async function* streamAsyncIterator(stream) {
 		reader.releaseLock();
 	}
 }
+
+export function hasOwnProperty(obj, propertyName) {
+	if (!['string', 'number', 'symbol'].includes(typeof propertyName))
+		throw new TypeError('The propertyName argument must be a string, number, or symbol.');
+	if (obj === null || obj === undefined)
+		throw new TypeError('The object target must not be null or undefined.');
+
+	return Object.prototype.hasOwnProperty.call(obj, propertyName);
+}

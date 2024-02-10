@@ -1,6 +1,7 @@
+import assert from 'node:assert/strict';
+import { after, describe, before, it } from 'node:test';
 import * as devalue from 'devalue';
 import * as cheerio from 'cheerio';
-import { expect } from 'chai';
 import { loadFixture } from './test-utils.js';
 import testAdapter from './test-adapter.js';
 import { preventNodeBuiltinDependencyPlugin } from './test-plugins.js';

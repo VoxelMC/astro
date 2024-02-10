@@ -1,6 +1,7 @@
-import { expect } from 'chai';
+import assert from 'node:assert/strict';
+import { after, describe, before, it } from 'node:test';
 import * as cheerio from 'cheerio';
-import { fixLineEndings, loadFixture } from './test-utils.js';
+import { fixLineEndings, loadFixture, hasOwnProperty } from './test-utils.js';
 
 describe('Experimental Content Collections cache - references', () => {
 	let fixture;
@@ -31,7 +32,11 @@ describe('Experimental Content Collections cache - references', () => {
 			});
 
 			describe(`JSON result`, () => {
+				/*
+				 * @type {number}
+				 */
 				let json;
+
 				before(async () => {
 					if (mode === 'prod') {
 						const rawJson = await fixture.readFile('/welcome-data.json');
@@ -44,31 +49,33 @@ describe('Experimental Content Collections cache - references', () => {
 				});
 
 				it('Returns expected keys', () => {
-					expect(json).to.haveOwnProperty('welcomePost');
-					expect(json).to.haveOwnProperty('banner');
-					expect(json).to.haveOwnProperty('author');
-					expect(json).to.haveOwnProperty('relatedPosts');
+					json.has;
+					assert.ok(hasOwnProperty(json, 'welcomePost'));
+					assert.ok(hasOwnProperty(json, 'banner'));
+					assert.ok(hasOwnProperty(json, 'author'));
+					assert.ok(hasOwnProperty(json, 'relatedPosts'));
 				});
 
 				it('Returns `banner` data', () => {
 					const { banner } = json;
-					expect(banner).to.haveOwnProperty('data');
-					expect(banner.id).to.equal('welcome');
-					expect(banner.collection).to.equal('banners');
-					expect(banner.data.alt).to.equal(
+					assert.ok(hasOwnProperty(banner, 'data'));
+					assert.strictEqual(banner.id, 'welcome');
+					assert.strictEqual(banner.collection, 'banners');
+					assert.strictEqual(
+						banner.data.alt,
 						'Futuristic landscape with chrome buildings and blue skies'
 					);
 
-					expect(banner.data.src.width).to.equal(400);
-					expect(banner.data.src.height).to.equal(225);
-					expect(banner.data.src.format).to.equal('jpg');
-					expect(banner.data.src.src.includes('the-future')).to.be.true;
+					assert.strictEqual(banner.data.src.width, 400);
+					assert.strictEqual(banner.data.src.height, 225);
+					assert.strictEqual(banner.data.src.format, 'jpg');
+					assert.ok(banner.data.src.src.includes('the-future'));
 				});
 
 				it('Returns `author` data', () => {
 					const { author } = json;
-					expect(author).to.haveOwnProperty('data');
-					expect(author).to.deep.equal({
+					assert.ok(hasOwnProperty(author, 'data'));
+					assert.deepStrictEqual(author, {
 						id: 'nate-moore',
 						collection: 'authors',
 						data: {
@@ -80,12 +87,12 @@ describe('Experimental Content Collections cache - references', () => {
 
 				it('Returns `relatedPosts` data', () => {
 					const { relatedPosts } = json;
-					expect(Array.isArray(relatedPosts)).to.be.true;
+					assert.ok(Array.isArray(relatedPosts));
 					const topLevelInfo = relatedPosts.map(({ data, body, ...meta }) => ({
 						...meta,
 						body: fixLineEndings(body).trim(),
 					}));
-					expect(topLevelInfo).to.deep.equal([
+					assert.deepStrictEqual(topLevelInfo, [
 						{
 							id: 'related-1.md',
 							slug: 'related-1',
@@ -100,7 +107,7 @@ describe('Experimental Content Collections cache - references', () => {
 						},
 					]);
 					const postData = relatedPosts.map(({ data }) => data);
-					expect(postData).to.deep.equal([
+					assert.deepStrictEqual(postData, [
 						{
 							title: 'Related post 1',
 							banner: { id: 'welcome', collection: 'banners' },
@@ -130,32 +137,33 @@ describe('Experimental Content Collections cache - references', () => {
 
 				it('Renders `banner` data', () => {
 					const banner = $('img[data-banner]');
-					expect(banner.length).to.equal(1);
-					expect(banner.attr('src')).to.include('the-future');
-					expect(banner.attr('alt')).to.equal(
+					assert.strictEqual(banner.length, 1);
+					assert.ok(banner.attr('src').includes('the-future'));
+					assert.strictEqual(
+						banner.attr('alt'),
 						'Futuristic landscape with chrome buildings and blue skies'
 					);
-					expect(banner.attr('width')).to.equal('400');
-					expect(banner.attr('height')).to.equal('225');
+					assert.strictEqual(banner.attr('width'), '400');
+					assert.strictEqual(banner.attr('height'), '225');
 				});
 
 				it('Renders `author` data', () => {
 					const author = $('a[data-author-name]');
-					expect(author.length).to.equal(1);
-					expect(author.attr('href')).to.equal('https://twitter.com/n_moore');
-					expect(author.text()).to.equal('Nate Something Moore');
+					assert.strictEqual(author.length, 1);
+					assert.strictEqual(author.attr('href'), 'https://twitter.com/n_moore');
+					assert.strictEqual(author.text(), 'Nate Something Moore');
 				});
 
 				it('Renders `relatedPosts` data', () => {
 					const relatedPosts = $('ul[data-related-posts]');
-					expect(relatedPosts.length).to.equal(1);
+					assert.strictEqual(relatedPosts.length, 1);
 					const relatedPost1 = relatedPosts.find('li').eq(0);
 
-					expect(relatedPost1.find('a').attr('href')).to.equal('/blog/related-1');
-					expect(relatedPost1.find('a').text()).to.equal('Related post 1');
+					assert.strictEqual(relatedPost1.find('a').attr('href'), '/blog/related-1');
+					assert.strictEqual(relatedPost1.find('a').text(), 'Related post 1');
 					const relatedPost2 = relatedPosts.find('li').eq(1);
-					expect(relatedPost2.find('a').attr('href')).to.equal('/blog/related-2');
-					expect(relatedPost2.find('a').text()).to.equal('Related post 2');
+					assert.strictEqual(relatedPost2.find('a').attr('href'), '/blog/related-2');
+					assert.strictEqual(relatedPost2.find('a').text(), 'Related post 2');
 				});
 			});
 		});

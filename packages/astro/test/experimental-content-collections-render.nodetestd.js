@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import assert from 'node:assert/strict';
+import { after, describe, before, it } from 'node:test';
 import * as cheerio from 'cheerio';
 import { loadFixture, isWindows } from './test-utils.js';
 import testAdapter from './test-adapter.js';
