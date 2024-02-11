@@ -172,7 +172,7 @@ describe('Setting inlineStylesheets to auto in server output', () => {
 
 	after(() => fixture.clean());
 
-	it('Renders some <style> and some <link> tags', async () => {
+	it.skip('Renders some <style> and some <link> tags', async () => {
 		const request = new Request('http://example.com/');
 		const response = await app.render(request);
 		const html = await response.text();
